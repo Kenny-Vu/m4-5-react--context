@@ -150,12 +150,18 @@ Update the following components to use context
 
 ```jsx
 const App = () => {
+  const UserContext = React.createContext(null);
+
   const [user, setUser] = React.useState({ username: "Alfalfa" });
 
-  return <Home user={user} setUser={setUser} />;
+  return (
+    <userContext.Provider value={{ user, setUser }}>
+      <Home />
+    </userContext.Provider>
+  );
 };
 
-const Home = ({ user, setUser }) => {
+const Home = () => {
   return (
     <>
       <Header user={user} setUser={setUser} />
@@ -164,7 +170,7 @@ const Home = ({ user, setUser }) => {
   );
 };
 
-const Header = ({ user, setUser }) => {
+const Header = () => {
   return (
     <header>
       <Navigation user={user} setUser={setUser} />
@@ -172,7 +178,8 @@ const Header = ({ user, setUser }) => {
   );
 };
 
-const Navigation = ({ user, setUser }) => {
+const Navigation = () => {
+  const { user, setUser } = React.useContext();
   return (
     <nav>
       <ul>
@@ -197,17 +204,20 @@ const Navigation = ({ user, setUser }) => {
 
 ```jsx
 const App = () => {
+  const UserContext = React.createContext(null);
   const [dialog, setDialog] = React.useState(null);
 
   return (
     <>
-      <MainContent dialog={dialog} setDialog={setDialog} />
-      <Dialog currentDialog={dialog} />
+      <UserContext>
+        <MainContent />
+        <Dialog />
+      </UserContext>
     </>
   );
 };
 
-const MainContent = ({ dialog, setDialog }) => {
+const MainContent = ({ setDialog }) => {
   return (
     <>
       <Sidebar>
@@ -220,8 +230,9 @@ const MainContent = ({ dialog, setDialog }) => {
   );
 };
 
-const Dialog = ({ currentDialog }) => {
-  if (!currentDialog) {
+const Dialog = () => {
+  const { dialog } = React.useContext();
+  if (!dialog) {
     return null;
   }
 
