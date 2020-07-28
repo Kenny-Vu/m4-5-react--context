@@ -10,35 +10,28 @@ import usePersistedState from "../hooks/use-persisted-state-hook";
 import { GameContext } from "./GameContext";
 
 function App() {
-  const {
-    numCookies,
-    setNumCookies,
-    purchasedItems,
-    setPurchasedItems,
-  } = React.useContext(GameContext);
+  const { numCookies, setNumCookies, purchasedItems } = React.useContext(
+    GameContext
+  );
 
-  //CALCULATES NUM OF COOKIES ACCUMULATED WHEN TAB IS CLOSED
+  //CALCULATES NUM OF COOKIES ACCUMULATED WHILE TAB WAS CLOSED
   useEffect(() => {
-    const currentTimeStamp = new Date().getTime();
+    const currentTimeStamp = new Date().getTime(); //fetching current time in ms
+    //calculating time difference in seconds since last time browser ran
     const timeDiff = Math.floor(
       (currentTimeStamp - JSON.parse(localStorage.getItem("pastTimeStamp"))) /
         1000
     );
-    let totalCookiesAcc = null;
+    let totalCookiesAcc = null; // sum of all cookies/sec that all 3 powerups generate together
     const itemsPurchasedKeys = Object.keys(purchasedItems);
     itemsPurchasedKeys.forEach((item) => {
       let numOwned = purchasedItems[item];
       let itemValue = items.find((element) => element.id === item).value;
       totalCookiesAcc += numOwned * itemValue * timeDiff;
-      console.log("current item:" + item);
-      console.log("timeDiff:" + timeDiff);
-      console.log("num of cookies accumulated:" + totalCookiesAcc);
-      console.log("expected num of cookies:" + (numCookies + totalCookiesAcc));
-      console.log("num of cookies:" + numCookies);
     });
     setNumCookies(numCookies + totalCookiesAcc);
   }, []);
-  //STORING CURRENT TIME STAMPS
+  //STORING CURRENT TIME STAMPS IN MS
   useEffect(() => {
     localStorage.setItem("pastTimeStamp", JSON.stringify(new Date().getTime()));
   }, [numCookies]);
