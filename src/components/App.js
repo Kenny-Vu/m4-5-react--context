@@ -9,7 +9,7 @@ import items from "../data";
 import usePersistedState from "../hooks/use-persisted-state-hook";
 import { GameContext } from "./GameContext";
 
-function App(props) {
+function App() {
   const {
     numCookies,
     setNumCookies,

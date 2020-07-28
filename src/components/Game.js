@@ -5,6 +5,7 @@ import useInterval from "../hooks/use-interval.hook";
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 import items from "../data";
+import { GameContext } from "./GameContext";
 
 const calculateCookiesPerSecond = (purchasedItems) => {
   return Object.keys(purchasedItems).reduce((acc, itemId) => {
@@ -16,12 +17,13 @@ const calculateCookiesPerSecond = (purchasedItems) => {
   }, 0);
 };
 
-const Game = ({
-  numCookies,
-  setNumCookies,
-  purchasedItems,
-  setPurchasedItems,
-}) => {
+const Game = () => {
+  const {
+    numCookies,
+    setNumCookies,
+    purchasedItems,
+    setPurchasedItems,
+  } = React.useContext(GameContext);
   const incrementCookies = () => {
     setNumCookies((c) => c + 1);
   };
