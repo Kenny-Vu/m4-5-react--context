@@ -50,12 +50,7 @@ function App() {
           <Home />
         </Route>
         <Route path="/game">
-          <Game
-            numCookies={numCookies}
-            setNumCookies={setNumCookies}
-            purchasedItems={purchasedItems}
-            setPurchasedItems={setPurchasedItems}
-          />
+          <Game />
         </Route>
       </Router>
     </>
