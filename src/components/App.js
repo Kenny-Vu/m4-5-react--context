@@ -6,38 +6,18 @@ import Home from "./Home";
 import Game from "./Game";
 import items from "../data";
 
-//CUSTOM HOOK - LOCAL STORAGE
-const usePersistedState = (keyName, keyValue) => {
-  //if value is already in storage, use that value instead
-  const trueKeyValue = JSON.parse(window.localStorage.getItem(keyName))
-    ? JSON.parse(window.localStorage.getItem(keyName))
-    : keyValue;
-  //create new state and pass the previous value or keyValue argument
-  const [state, setState] = React.useState(trueKeyValue);
-  //update state in local storage everytime state changes
-  useEffect(() => {
-    window.localStorage.setItem(keyName, JSON.stringify(state));
-  }, [state]);
-
-  //returning state
-  return [state, setState];
-};
+import usePersistedState from "../hooks/use-persisted-state-hook";
+import { GameContext } from "./GameContext";
 
 function App(props) {
-  // const [numCookies, setNumCookies] = React.useState(1000);
-  // const [purchasedItems, setPurchasedItems] = React.useState({
-  //   cursor: 0,
-  //   grandma: 0,
-  //   farm: 0,
-  // });
-  const [numCookies, setNumCookies] = usePersistedState("num-cookies", 1000);
-  const [purchasedItems, setPurchasedItems] = usePersistedState("num-items", {
-    cursor: 0,
-    grandma: 0,
-    farm: 0,
-  });
+  const {
+    numCookies,
+    setNumCookies,
+    purchasedItems,
+    setPurchasedItems,
+  } = React.useContext(GameContext);
 
-  //useEffect to compare timeStamps on mount
+  //CALCULATES NUM OF COOKIES ACCUMULATED WHEN TAB IS CLOSED
   useEffect(() => {
     const currentTimeStamp = new Date().getTime();
     const timeDiff = Math.floor(
@@ -58,7 +38,7 @@ function App(props) {
     });
     setNumCookies(numCookies + totalCookiesAcc);
   }, []);
-  //useEffect to store current timeStamp
+  //STORING CURRENT TIME STAMPS
   useEffect(() => {
     localStorage.setItem("pastTimeStamp", JSON.stringify(new Date().getTime()));
   }, [numCookies]);
